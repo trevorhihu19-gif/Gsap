@@ -8,8 +8,8 @@ import { useMediaQuery } from "react-responsive";
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 export const Hero = () => {
-    const videoRef = useRef();
-    const isMobile = useMediaQuery({ maxWidth: 767});
+  const videoRef = useRef();
+  const isMobile = useMediaQuery({ maxWidth: 767 });
 
   useGSAP(() => {
     const heroSplit = new SplitText(".title", { type: "chars, words" });
@@ -43,26 +43,28 @@ export const Hero = () => {
         },
       })
       .to(".right-leaf", { y: 200 }, 0)
-      .to(".left-leaf", { y: -200 }, 0)
+      .to(".left-leaf", { y: -200 }, 0);
 
-      const startValue = isMobile ? 'top 50%': 'centre 60%';
-      const endValue = isMobile ? '120% top': 'bottom top';
+    const startValue = isMobile ? "top 80%" : "top top";
+    const endValue = isMobile ? "120% top" : "bottom top";
 
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: "#video",
-          start: startValue,
-          end: endValue,
-          scrub: true,
-          pin: true,
-        }
-      })
-     
-       videoRef.current.onloadedmetadata = () => {
-        tl.to(videoRef.current, {
-            currentTime: videoRef.current.duration
-        })
-       }
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: "#video",
+        start: startValue,
+        end: endValue,
+        scrub: true,
+        pin: true,
+      },
+    });
+
+    videoRef.current.onloadedmetadata = () => {
+      tl.fromTo(
+        videoRef.current,
+        { currentTime: 0 },
+        { currentTime: videoRef.current.duration },
+      );
+    };
   }, []);
 
   return (
@@ -104,12 +106,13 @@ export const Hero = () => {
       </section>
 
       <div className="video-absolute inset-0">
-        <video 
-            ref={videoRef}
-            src="/videos/input.mp4"
-            muted
-            playsInline
-            preload="auto"
+        <video
+          ref={videoRef}
+          src="/videos/output.mp4"
+          muted
+          playsInline
+          preload="auto"
+          onLoadedMetadata={(e) => (e.target.currentTime = 0)}
         />
       </div>
     </>
